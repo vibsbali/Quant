@@ -2,7 +2,7 @@
 servers <- c(0.20, 0.40, 0.60, 0.80, 1)
 successes <- 0;
 failures <- 0;
-numberOfExperiments <- 1000000;
+numberOfExperiments <- 100000;
 
 #set seed
 #set.seed(0)
@@ -10,7 +10,7 @@ numberOfExperiments <- 1000000;
 #Following function will give an indicator random variable telling whether the request has been accepted
 # or rejcted on basis of the selected server's probability. 0 means rejected 
 generateIndicator <- function(probOfFailure) {
-  #print(probOfFailure);
+  #print(cat("probOfFailure ", probOfFailure));
   result <- sample(0:1, 1, replace=F,prob=c(probOfFailure, (1-probOfFailure)))
   return(result);
 }
@@ -30,14 +30,14 @@ i <- 1;
 while(i <= numberOfExperiments){
   #randomly select a server to send the request to
   firstServer <- sample(1:5, 1);
-  #print(cat("Selected Server is ", selectedServer));
+  #print(cat("First Server is ", firstServer));
   
   #send the request and check if failed first time
   if(!generateIndicator(servers[firstServer])){
     
     #choose another server and send a request. 
     secondServer <- getAnotherServer(firstServer, 0);
-    #print(cat("New Server", anotherServer))
+    #print(cat("Second Server is", secondServer))
     
     #send the request again and check if failed again
     if(!generateIndicator(servers[secondServer])){
@@ -45,12 +45,14 @@ while(i <= numberOfExperiments){
       #print(cat("Second Server failed", selectedServer));
       #choose another server and send a request. 
       thirdServer <- getAnotherServer(firstServer, secondServer);
-      #print(cat("New Server", anotherServer))
+      #print(cat("Final Server", thirdServer))
       
       #Send the request again and if successful mark success
       if(generateIndicator(servers[thirdServer])){
+        #print("Success")
         successes = successes + 1;
       } else{
+        #print("Fail")
         failures = failures + 1;
       }
       
