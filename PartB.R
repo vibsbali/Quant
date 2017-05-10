@@ -2,10 +2,7 @@
 servers <- c(0.20, 0.40, 0.60, 0.80, 1)
 successes <- 0;
 failures <- 0;
-numberOfExperiments <- 100000;
-
-#set seed
-#set.seed(0)
+numberOfExperiments <- 1000000;
 
 #Following function will give an indicator random variable telling whether the request has been accepted
 # or rejcted on basis of the selected server's probability. 0 means rejected 
@@ -15,12 +12,12 @@ generateIndicator <- function(probOfFailure) {
   return(result);
 }
 
-#function that provides another server when the request is failed twice
-getAnotherServer <- function(existingServerOne, existingServerTwo) {
+#function that provides a random server from the remaining unused servers
+getAnotherServer <- function(previouslyFailedServerOne, previouslyFailedServerTwo) {
   anotherServer <- sample(1:5, 1);
-  #the following loop is to ensure that the existing server is not returned 
-  while(anotherServer == existingServerOne || anotherServer == existingServerTwo){
-    anotherServer = sample(1:5, 1);
+  #the following loop is to ensure that the previously failed server doesn't get returned 
+  while(anotherServer == previouslyFailedServerOne || anotherServer == previouslyFailedServerTwo){
+    anotherServer <- sample(1:5, 1);
   }
   return(anotherServer);
 }
@@ -42,7 +39,7 @@ while(i <= numberOfExperiments){
     #send the request again and check if failed again
     if(!generateIndicator(servers[secondServer])){
       
-      #print(cat("Second Server failed", selectedServer));
+      #print(cat("Second Server failed", secondServer));
       #choose another server and send a request. 
       thirdServer <- getAnotherServer(firstServer, secondServer);
       #print(cat("Final Server", thirdServer))
@@ -50,14 +47,14 @@ while(i <= numberOfExperiments){
       #Send the request again and if successful mark success
       if(generateIndicator(servers[thirdServer])){
         #print("Success")
-        successes = successes + 1;
+        successes <- successes + 1;
       } else{
         #print("Fail")
-        failures = failures + 1;
+        failures <- failures + 1;
       }
       
       #the experiment has been concluded so add 1
-      i = i+1;
+      i <- i+1;
     }
   } 
 }

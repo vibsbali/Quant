@@ -4,9 +4,6 @@ successes <- 0;
 failures <- 0;
 numberOfExperiments <- 1000000;
 
-#set seed
-#set.seed(0)
-
 #Following function will give an indicator random variable telling whether the request has been accepted
 # or rejcted on basis of the selected server's probability. 0 means rejected 
 generateIndicator <- function(probOfFailure) {
