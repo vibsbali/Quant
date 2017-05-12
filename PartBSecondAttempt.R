@@ -1,14 +1,13 @@
-#declare a vector with probabilities of FAILURE
-servers <- c(0.20, 0.40, 0.60, 0.80, 1)
+#declare a vector with probabilities of SUCCESS
+servers <- c(0.80, 0.60, 0.40, 0.20, 0)
 successes <- 0;
 failures <- 0;
 numberOfExperiments <- 1000000;
 
 #Following function takes in the probability of failure and based on that returns 0 or 1
 #0 means fail and 1 means success
-simulateBernoulliTrial <- function(probOfFailure) {
-  #print(cat("probOfFailure ", probOfFailure));
-  result <- sample(0:1, 1, replace=F,prob=c(probOfFailure, (1-probOfFailure)))
+simulateBernoulliTrial  <- function(probOfSuccess) {
+  result <- rbinom(1, 1, probOfSuccess)
   return(result);
 }
 

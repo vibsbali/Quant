@@ -4,10 +4,9 @@ successes <- 0;
 failures <- 0;
 numberOfExperiments <- 1000000;
 
-#Following function will give an indicator random variable telling whether the request has been accepted
-# or rejcted on basis of the selected server's probability. 0 means rejected 
-generateIndicator <- function(probOfFailure) {
-  #print(probOfFailure);
+#Following function takes in the probability of failure and based on that returns 0 or 1
+#0 means fail and 1 means success
+simulateBernoulliTrial <- function(probOfFailure) {
   result <- sample(0:1, 1, replace=F,prob=c(probOfFailure, (1-probOfFailure)))
   return(result);
 }
@@ -27,13 +26,12 @@ i <- 1;
 while(i <= numberOfExperiments){
   #randomly select a server to send the request to
   selectedServer <- sample(1:5, 1);
-  #print(cat("Selected Server is ", selectedServer));
   
   #send the request and check if failed first time
-  if(!generateIndicator(servers[selectedServer])){
+  if(!simulateBernoulliTrial(servers[selectedServer])){
     #print(cat("Selected Server is ", selectedServer));
     #send the request again and check if failed again
-    if(!generateIndicator(servers[selectedServer])){
+    if(!simulateBernoulliTrial(servers[selectedServer])){
       
       #print(cat("Server failed twice", selectedServer));
       
@@ -42,7 +40,7 @@ while(i <= numberOfExperiments){
       #print(cat("New Server", anotherServer))
       
       #Send the request again and if successful mark success
-      if(generateIndicator(servers[anotherServer])){
+      if(simulateBernoulliTrial(servers[anotherServer])){
         successes = successes + 1;
       } else{
         failures = failures + 1;
